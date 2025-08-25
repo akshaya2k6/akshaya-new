@@ -1,0 +1,79 @@
+CREATE DATABASE IF NOT EXISTS CompanyDB;
+USE CompanyDB;
+DROP TABLE IF EXISTS Employees;
+CREATE TABLE Employees (
+    EmpID INT PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) UNIQUE
+);
+INSERT INTO Employees (EmpID, Name, Email)
+VALUES (1, 'Akshi', 'akshi@email
+.com'),
+       (2, 'kaviya', 'kaviya@email.com'),
+       (2, 'dharvika', 'dharvi@email.com');
+SHOW INDEX FROM Employees;
+ALTER TABLE Employees DROP INDEX Email;
+SHOW INDEX FROM Employees;
+show create table employees;
+CREATE DATABASE IF NOT EXISTS CompanyDB;
+USE CompanyDB;
+DROP TABLE IF EXISTS Employees;
+CREATE TABLE Employees (
+    EmpID INT PRIMARY KEY,        
+    Name VARCHAR(50) NOT NULL,
+    Department VARCHAR(50)
+);
+INSERT INTO Employees (EmpID, Name, Department)
+VALUES (1, 'Akshi', 'CSE'),
+       (2, 'dharvika', 'ECE'),
+       (3, 'kaviya', 'IT');
+DESCRIBE Employees;
+SELECT * FROM Employees;
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(50),
+    SupplierID INT,
+    CategoryID INT,
+    Unit VARCHAR(50),
+    Price DECIMAL(10,2)
+);
+INSERT INTO Products (ProductID, ProductName, SupplierID, CategoryID, Unit, Price)
+VALUES 
+(1, 'Chai', 1, 1, '10 boxes x 20 bags', 18.00),
+(2, 'Chang', 1, 1, '24 - 12 oz bottles', 19.00),
+(3, 'Aniseed Syrup', 1, 2, '12 - 550 ml bottles', 10.00);
+SELECT * FROM Products;
+
+CREATE TABLE Customer (
+    CustomerID INT PRIMARY KEY,         -- Primary Key
+    CustomerName VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE
+);
+
+
+CREATE TABLE Product (
+    ProductID INT PRIMARY KEY,          -- Primary Key
+    ProductName VARCHAR(100) NOT NULL,
+    Price DECIMAL(10,2) NOT NULL,
+    CustomerID INT,                     -- Foreign Key
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
+);
+INSERT INTO Customer (CustomerID, CustomerName, Email)
+VALUES (1, 'Akshi', 'akshi@example.com'),
+       (2, 'Ravi', 'ravi@example.com');
+
+INSERT INTO Product (ProductID, ProductName, Price, CustomerID)
+VALUES (101, 'Laptop', 55000.00, 1),   -- belongs to CustomerID 1
+       (102, 'Mobile', 25000.00, 2),   -- belongs to CustomerID 2
+       (103, 'Tablet', 15000.00, 1);   -- belongs to CustomerID 1
+SELECT 
+    c.CustomerID,
+    c.CustomerName,
+    p.ProductName,
+    p.Price
+FROM 
+    Customer c
+JOIN 
+    Product p
+ON 
+    c.CustomerID = p.CustomerID;
