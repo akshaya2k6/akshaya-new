@@ -1,0 +1,27 @@
+CREATE DATABASE akshayapreethi;
+Use akshayapreethi;
+ CREATE TABLE Student (
+    StudentID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Age INT,
+    Department VARCHAR(30)
+);
+INSERT INTO Student (StudentID, Name, Age, Department) 
+VALUES (1, 'Akshi', 21, 'CSE');
+
+INSERT INTO Student (StudentID, Name, Age, Department) 
+VALUES (2, 'dharvika', 22, 'ECE');
+
+INSERT INTO Student (StudentID, Name, Age, Department) 
+VALUES (3, 'pooja', 20, 'IT');
+ALTER TABLE student RENAME COLUMN STUDENTID TO ID
+
+-- Insert a new student
+INSERT INTO Students (Studentname, StudentAge, Department, Marks)
+VALUES ('Akshaya', 20, 'AI', 75);
+
+-- Update using StudentID (safer in safe mode)
+UPDATE Students
+SET Marks = Marks + 5
+WHERE StudentID = 1;
+
