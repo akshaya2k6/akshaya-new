@@ -1,0 +1,57 @@
+CREATE DATABASE sathyabama;
+USE sathyabama;
+CREATE TABLE Category (
+    id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    dno INT NOT NULL
+);
+CREATE TABLE Product (
+    id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    dno INT NOT NULL,
+    category_id INT NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES Category(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+CREATE TABLE Orders (
+    id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    age INT NOT NULL,
+    product_id INT NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES Product(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+INSERT INTO Category (id, name, dno) VALUES
+(1, 'Akshi', 101),
+(2, 'kaviya', 102),
+(3, 'dharvika', 103);
+INSERT INTO Product (id, name, dno, category_id) VALUES
+(1, 'Python Book', 201, 1),
+(2, 'Java Book', 202, 1),
+(3, 'Database Notes', 203, 2),
+(4, 'AI Project Kit', 204, 3);
+INSERT INTO Orders (id, name, age, product_id) VALUES
+(1, 'Order1', 20, 1),
+(2, 'Order2', 21, 2),
+(3, 'Order3', 22, 3),
+(4, 'Order4', 23, 4);
+SELECT * FROM Category;
+SELECT * FROM Product;
+SELECT * FROM Orders;
+SELECT id AS Student_ID, name AS Student_Name, dno AS Department_No FROM Category;
+SELECT C.id, C.name, C.dno FROM Category AS C;
+SELECT * FROM Category WHERE name LIKE 'A%';
+SELECT * FROM Product WHERE name LIKE '%Book';
+SELECT * FROM Orders WHERE name LIKE '%er%';
+CREATE VIEW StudentProducts AS
+SELECT C.name AS Student_Name, P.name AS Product_Name, P.dno
+FROM Category C
+JOIN Product P ON C.id = P.category_id;
+SELECT * FROM StudentProducts;
+CREATE VIEW ProductOrders AS
+SELECT P.name AS Product_Name, O.name AS Order_Name, O.age
+FROM Product P
+JOIN Orders O ON P.id = O.product_id;
+SELECT * FROM ProductOrders;
