@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Employee Addition Form</title>
+  <style>
+    :root{
+      --accent:#2563eb;
+      --muted:#6b7280;
+      --bg:#f8fafc;
+      --card:#ffffff;
+      --radius:12px;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    body{background:var(--bg); margin:0; padding:24px; color:#111827}
+    .container{max-width:600px;margin:0 auto}
+    .card{background:var(--card); border-radius:var(--radius); box-shadow:0 6px 18px rgba(15,23,42,0.06); padding:20px}
+    h1{font-size:20px;margin:0 0 12px;text-align:center}
+    p.lead{color:var(--muted);margin:0 0 18px;text-align:center}
+
+    form{display:flex;flex-direction:column;gap:12px}
+    label{display:block;font-size:13px;margin-bottom:6px;color:#111827}
+    input[type="text"], input[type="email"], input[type="date"], input[type="number"], select, textarea, input[type="tel"]{
+      width:100%; padding:8px 10px; border:1px solid #e6e9ee; border-radius:8px; font-size:14px; box-sizing:border-box;
+    }
+    textarea{min-height:80px; resize:vertical}
+    .row{display:flex;gap:8px}
+    .actions{display:flex;gap:10px;align-items:center;margin-top:8px;justify-content:center}
+    button{background:var(--accent); color:white;border:0;padding:10px 14px;border-radius:8px;cursor:pointer}
+    button.secondary{background:#e6eefc;color:var(--accent)}
+    .note{font-size:13px;color:var(--muted)}
+    .preview{display:flex;gap:12px;align-items:center;margin-top:6px}
+    .preview img{width:72px;height:72px;border-radius:8px;object-fit:cover; border:1px solid #e6e9ee}
+    .summary{margin-top:16px;background:#fbfdff;padding:12px;border-radius:8px;border:1px solid #eef6ff;font-family:monospace;white-space:pre-wrap}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Employee Addition Form</h1>
+      <p class="lead">Fill out the details below to add a new employee.</p>
+
+      <form id="employeeForm" novalidate>
+        <div>
+          <label for="empId">Employee ID *</label>
+          <input id="empId" name="empId" type="text" placeholder="E.g. EMP-001" required />
+        </div>
+
+        <div>
+          <label for="fullName">Full name *</label>
+          <input id="fullName" name="fullName" type="text" placeholder="First Last" required />
+        </div>
+
+        <div>
+          <label for="email">Email *</label>
+          <input id="email" name="email" type="email" placeholder="name@example.com" required />
+        </div>
+
+        <div>
+          <label for="phone">Phone *</label>
+          <input id="phone" name="phone" type="tel" placeholder="+91 98765 43210" required />
+        </div>
+
+        <div>
+          <label for="department">Department *</label>
+          <select id="department" name="department" required>
+            <option value="">Select department</option>
+            <option>Engineering</option>
+            <option>Data Science</option>
+            <option>HR</option>
+            <option>Sales</option>
+            <option>Marketing</option>
+            <option>Finance</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="designation">Designation *</label>
+          <input id="designation" name="designation" type="text" placeholder="E.g. Software Engineer" required />
+        </div>
+
+        <div>
+          <label for="doj">Date of Joining *</label>
+          <input id="doj" name="doj" type="date" required />
+        </div>
+
+        <div>
+          <label for="salary">Salary (monthly, ₹) *</label>
+          <input id="salary" name="salary" type="number" min="0" step="0.01" placeholder="e.g. 50000" required />
+        </div>
+
+        <div>
+          <label for="address">Address</label>
+          <textarea id="address" name="address" placeholder="Street, city, state, pincode"></textarea>
+        </div>
+
+        <div>
+          <label>Gender</label>
+          <div class="row">
+            <label><input type="radio" name="gender" value="Female"> Female</label>
+            <label><input type="radio" name="gender" value="Male"> Male</label>
+            <label><input type="radio" name="gender" value="Other"> Other</label>
+          </div>
+        </div>
+
+        <div>
+          <label for="status">Employment status</label>
+          <select id="status" name="status">
+            <option>Active</option>
+            <option>Probation</option>
+            <option>On Leave</option>
+            <option>Resigned</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="photo">Profile photo</label>
+          <input id="photo" name="photo" type="file" accept="image/*" />
+          <p class="note">Optional — small image preview shown below when selected.</p>
+          <div class="preview" id="photoPreview"></div>
+        </div>
+
+        <div class="actions">
+          <button type="submit">Add Employee</button>
+          <button type="button" class="secondary" id="resetBtn">Reset</button>
+        </div>
+      </form>
+
+      <div class="summary" id="summary" aria-live="polite" style="display:none"></div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('employeeForm');
+    const photo = document.getElementById('photo');
+    const preview = document.getElementById('photoPreview');
+    const summary = document.getElementById('summary');
+    const resetBtn = document.getElementById('resetBtn');
+
+    photo.addEventListener('change', () => {
+      preview.innerHTML = '';
+      const file = photo.files && photo.files[0];
+      if (!file) return;
+      const img = document.createElement('img');
+      img.alt = 'Profile preview';
+      img.src = URL.createObjectURL(file);
+      preview.appendChild(img);
+    });
+
+    resetBtn.addEventListener('click', () => {
+      form.reset();
+      preview.innerHTML = '';
+      summary.style.display = 'none';
+      summary.textContent = '';
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()){
+        form.reportValidity();
+        return;
+      }
+      const fd = new FormData(form);
+      const data = {};
+      for (const [k,v] of fd.entries()){
+        if (k === 'photo' && v && v.name) {
+          data.photo = v.name;
+        } else {
+          data[k] = v;
+        }
+      }
+      data.submittedAt = new Date().toISOString();
+      summary.style.display = 'block';
+      summary.textContent = JSON.stringify(data, null, 2);
+      try {
+        const key = 'employees_local';
+        const existing = JSON.parse(localStorage.getItem(key) || '[]');
+        existing.push(data);
+        localStorage.setItem(key, JSON.stringify(existing));
+      } catch (err) {
+        console.warn('Could not save to localStorage', err);
+      }
+      console.log('Employee added (browser only):', data);
+      alert('Employee added successfully (stored locally in your browser).');
+    });
+  </script>
+</body>
+</html>
+
