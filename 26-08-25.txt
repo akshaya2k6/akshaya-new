@@ -1,0 +1,64 @@
+CREATE DATABASE CollegeDB;
+USE CollegeDB;
+CREATE TABLE Students (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    age INT NOT NULL,
+    marks INT NOT NULL
+);
+INSERT INTO Students (student_id, name, age, marks) VALUES
+(1, 'Akshi', 20, 85),
+(2, 'kaviya', 21, 65),
+(3, 'dharvika', 19, 92),
+(4, 'preethi', 22, 55),
+(5, 'avantika', 20, 70);
+SELECT name, marks FROM Students WHERE marks > 70;
+SELECT name, age FROM Students WHERE age = 20;
+SELECT name, age, marks FROM Students WHERE marks > 60 AND age < 21;
+SELECT name, age, marks FROM Students WHERE age = 20 OR marks < 60;
+SELECT name, marks FROM Students WHERE NOT (marks > 80);
+SELECT name, marks
+FROM Students
+WHERE student_id NOT IN (
+    SELECT student_id FROM Students WHERE marks > 80
+);
+SELECT name, marks FROM Students WHERE marks NOT BETWEEN 60 AND 80;
+SELECT worker_id, worker_name, department, salary
+FROM Workers
+WHERE department NOT IN ('HR', 'Admin')
+  AND salary BETWEEN 70000 AND 300000;
+  CREATE TABLE Workers (
+    worker_id INT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    worker_name VARCHAR(50) NOT NULL,
+    department VARCHAR(50) NOT NULL,
+    salary INT NOT NULL
+);
+
+INSERT INTO Workers (worker_id, first_name, worker_name, department, salary) VALUES
+(1, 'Vikram', 'Vikram Kumar', 'Finance', 250000),
+(2, 'Anitha', 'Anitha R', 'HR', 90000),
+(3, 'Varun', 'Varun S', 'IT', 300000),
+(4, 'Meena', 'Meena J', 'Admin', 150000),
+(5, 'Vishwa', 'Vishwa R', 'Marketing', 220000),
+(6, 'Rahul', 'Rahul K', 'IT', 120000);
+
+SELECT worker_id, first_name, department, salary
+FROM Workers
+WHERE first_name LIKE 'V%'
+  AND salary >= 200000;
+SELECT SUM(salary) AS total_salary
+FROM Workers
+WHERE department IN ('HR', 'Admin');
+SELECT COUNT(*) AS employee_count
+FROM Workers
+WHERE first_name LIKE 'V%';
+SELECT SUM(salary) AS total_salary
+FROM Workers
+WHERE salary BETWEEN 50000 AND 200000;
+
+  
+  
+  
+  
+  
