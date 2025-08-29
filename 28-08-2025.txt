@@ -1,0 +1,58 @@
+CREATE DATABASE College;
+USE College;
+CREATE TABLE Students (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    age INT NOT NULL,
+    marks INT NOT NULL
+);
+INSERT INTO Students (student_id, name, age, marks) VALUES
+(1, 'Akshi', 20, 85),
+(2, 'kaviya', 21, 65),
+(3, 'dharvika', 19, 92),
+(4, 'preethi', 22, 55),
+(5, 'avantika', 20, 70);
+SELECT * FROM Students
+ORDER BY marks DESC;
+SELECT age, COUNT(*) AS student_count
+FROM Students
+GROUP BY age;
+SELECT COUNT(*) AS total_students FROM Students;
+CREATE DATABASE CompanyDB;
+USE CompanyDB;
+CREATE TABLE Employees (
+    employee_id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    department VARCHAR(50) NOT NULL,
+    salary DECIMAL(10,2) NOT NULL
+);
+SELECT UPPER(department) AS dept_name, COUNT(*) AS total_employees
+FROM employees
+GROUP BY UPPER(department)
+ORDER BY dept_name ASC;
+SELECT department, MAX(salary) AS highest_salary
+FROM Employees
+GROUP BY department;
+SELECT age, COUNT(*) AS student_count
+FROM Students
+GROUP BY age
+HAVING COUNT(*) > 1;
+SELECT age, AVG(marks) AS avg_marks
+FROM Students
+GROUP BY age
+HAVING AVG(marks) > 100;
+SELECT age, MAX(marks) AS max_marks
+FROM Students
+GROUP BY age
+HAVING MAX(marks) = 92;
+SELECT age, COUNT(*) AS student_count, SUM(marks) AS total_marks
+FROM Students
+GROUP BY age
+HAVING COUNT(*) > 1 AND SUM(marks) > 100;
+SELECT age, AVG(marks) AS avg_marks
+FROM Students
+GROUP BY age
+HAVING AVG(marks) BETWEEN 70 AND 90;
+
+
+  
