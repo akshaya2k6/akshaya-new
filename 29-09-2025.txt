@@ -1,0 +1,62 @@
+CREATE TABLE employee (
+    emp_id INT PRIMARY KEY,
+    name VARCHAR(50),
+    dept_id INT
+);
+CREATE TABLE department (
+    dept_id INT PRIMARY KEY,
+    department_name VARCHAR(50),
+    location VARCHAR(50)
+);
+SELECT e.emp_id, e.name, d.department_name
+FROM employee e
+INNER JOIN department d ON e.dept_id = d.dept_id;
+SELECT e.emp_id, e.name, d.department_name
+FROM employee e
+LEFT JOIN department d ON e.dept_id = d.dept_id;
+SELECT e.emp_id, e.name, d.department_name
+FROM employee e
+RIGHT JOIN department d ON e.dept_id = d.dept_id;
+SELECT e.emp_id, e.name, d.department_name
+FROM employee e
+FULL OUTER JOIN department d ON e.dept_id = d.dept_id;
+SELECT *
+FROM employee
+NATURAL JOIN department;
+SELECT e.name, d.department_name
+FROM employee e
+CROSS JOIN department d;
+  
+  
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
