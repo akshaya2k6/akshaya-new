@@ -1,0 +1,61 @@
+package collection;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeSet;
+
+
+public class advance {
+
+	public static void main(String[] args) {
+		
+		        
+		        ArrayList<String> list = new ArrayList<>();
+		        list.add("Mango");
+		        list.add("Apple");
+		        list.add("Banana");
+		        list.add("Apple");  
+		        list.add("Grapes");
+		        System.out.println("ArrayList (with duplicates): " + list);
+		        
+		        //TREE SET
+                TreeSet<String> set = new TreeSet<>(list);
+                System.out.println("TreeSet (sorted, no duplicates): " + set);
+                set.add("Orange");
+		        System.out.println("After adding 'Orange' to TreeSet: " + set);
+                System.out.println("Displaying TreeSet using loop:");
+		        for (String item : set) {
+		        System.out.println(item);
+		        
+		        
+		        // HASH MAP
+		        HashMap<Integer, String> map = new HashMap<>();
+                map.put(101, "Apple");
+		        map.put(102, "Mango");
+		        map.put(103, "Banana");
+
+		        
+		        System.out.println("HashMap: " + map);
+
+		       
+		        System.out.println("Value for key 102: " + map.get(102));
+
+		        
+		        map.put(102, "Orange");  
+		        System.out.println("After update: " + map);
+
+		        
+		        map.remove(103);
+		        System.out.println("After removing key 103: " + map);
+
+		        
+		        System.out.println("Keys: " + map.keySet());
+		        System.out.println("Values: " + map.values());
+                System.out.println("Using loop:");
+		        for (Integer key : map.keySet()) {
+		        System.out.println(key + " = " + map.get(key));
+		        }
+		    }
+		        }
+		    }
+		
