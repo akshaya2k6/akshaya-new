@@ -1,0 +1,149 @@
+package akshaya;
+
+public class fundamental {
+    public static void main(String[] args) {
+    	
+                Numeric num = new Numeric();
+    			Alpha alp = new Alpha();
+
+    		
+    			num.start(); 
+    			alp.start();
+
+    			
+    			System.out.println("Number Thread : " + num.getName());
+    			System.out.println("Alphabets Thread : " + alp.getName());
+
+    	
+    			System.out.println("Number Thread : " + num.getPriority());
+    			System.out.println("Alphabets Thread : " + alp.getPriority());
+
+    			
+    			System.out.println("Number Thread : " + num.getState());
+    			System.out.println("Alphabets Thread : " + alp.getState());
+
+    			
+    			System.out.println(Thread.currentThread().getName());
+
+    			
+    			num.setName("akshaya");
+    			alp.setName("preethi");
+
+    			
+    			System.out.println("Number Thread : " + num.getState());
+    			System.out.println("Alphabets Thread : " + alp.getState());
+
+    			
+
+    			if (num.isAlive()) {
+    			System.out.println("preethi thread is Alive");
+    			} else {
+    				System.out.println("preethiThread is dead");
+    			}
+
+    			if (alp.isAlive()) {
+    			System.out.println("akshaya thread is Alive");
+    			} else {
+    			System.out.println("akshaya read is dead");
+    			}
+
+    		}
+
+    	}
+
+    	class Numeric extends Thread {
+    		int a = 0;
+
+    		public void run() {
+
+    			try {
+    				for (int i = 0; i <= 10; i++) {
+    					a++;
+    			System.out.println("Numeric Thread : " + a);
+    				}
+    			} catch (Exception e) {
+    				System.out.println(e);
+    			}
+
+    		}
+    	}
+
+    	class Alpha extends Thread {
+    		char a = 'A';
+
+    		public void run() {
+    			try {
+    				for (int i = 0; i <= 25; i++) {
+
+    			System.out.println("Alpha Thread : " + a);
+    					a++;
+    				}
+    			} catch (Exception e) {
+    				System.out.println(e);
+    			}
+
+    		}
+    	}
+2)package akshaya;
+
+public class fundamental {
+
+    public static void main(String[] args) {
+
+        
+        String s1 = "Welcome";
+        String s2 = new String("Welcome");
+        String s3 = "Java Programming";
+
+        
+        System.out.println("Length of s1 : " + s1.length());
+
+       
+        System.out.println("Character at index 3 in s3 : " + s3.charAt(3));
+
+        
+        System.out.println("Substring (5 to end) : " + s3.substring(5));
+        System.out.println("Substring (0 to 4) : " + s3.substring(0, 4));
+
+        
+        System.out.println("Uppercase : " + s3.toUpperCase());
+        System.out.println("Lowercase : " + s3.toLowerCase());
+
+        
+        String s4 = s1.concat(" to Java");
+        System.out.println("After concat : " + s4);
+
+        
+        System.out.println("s1 equals s2 : " + s1.equals(s2));
+        System.out.println("s1 equalsIgnoreCase s2 : " + s1.equalsIgnoreCase(s2));
+
+        
+        System.out.println("s3 startsWith 'Java'? " + s3.startsWith("Java"));
+        System.out.println("s3 endsWith 'ing'? " + s3.endsWith("ing"));
+
+       
+        System.out.println("Index of 'a' in s3 : " + s3.indexOf("a"));
+
+        
+        String s5 = "   Akshi is learning Java   ";
+        System.out.println("Before trim : '" + s5 + "'");
+        System.out.println("After trim : '" + s5.trim() + "'");
+
+        
+        System.out.println(s3.replace("Java", "Python"));
+
+        
+        String data = "Java String Methods Example";
+        String[] words = data.split(" ");
+        System.out.println("Split words:");
+        for (String w : words) {
+            System.out.println(w);
+        }
+
+        
+        int num = 100;
+        String numStr = String.valueOf(num);
+        System.out.println("ValueOf example : " + numStr + 10);
+    }
+}
+
