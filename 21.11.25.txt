@@ -1,0 +1,88 @@
+package akshaya;
+public class fundamental {
+    public static void main(String[] args) {
+         MathOperation mo = new MathOperation();
+        System.out.println("Addition 2 values: " + mo.add(10, 20));
+        System.out.println("Addition 3 values: " + mo.add(10, 20, 30));
+        Animal a = new Dog();
+        a.sound();  
+        Student s = new Student();  
+        Student1 s1 = new Student1("Akshi"); 
+        System.out.println("Student1 Name: " + s1.name);
+
+        
+        Student2 s2 = new Student2();
+        s2.setAge(21);
+        System.out.println("Student2 Age: " + s2.getAge());
+        Vehicle v = new Car();
+        v.start(); 
+
+        try {
+            ArithmeticOperation op = new ArithmeticOperation();
+            System.out.println("Division: " + op.divide(10, 0)); 
+        } catch (Exception e) {
+            System.out.println("Exception Caught: " + e.getMessage());
+        }
+    }
+}
+class MathOperation {
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    int add(int a, int b, int c) {
+        return a + b + c;
+    }
+}
+class Animal {
+    void sound() {
+        System.out.println("Animal makes sound");
+    }
+}
+
+class Dog extends Animal {
+    void sound() {
+        System.out.println("Dog barks");   
+    }
+}
+class Student {
+    Student() {
+        System.out.println("Default Constructor Called");
+    }
+}
+
+class Student1 {
+    String name;
+
+    Student1(String n) {
+        name = n;
+    }
+}
+class Student2 {
+    private int age;
+
+    public void setAge(int a) {
+        if (a > 0) {
+            age = a;
+        }
+    }
+
+    public int getAge() {
+        return age;
+    }
+}
+abstract class Vehicle {
+    abstract void start();  
+}
+
+class Car extends Vehicle {
+    void start() {
+        System.out.println("Car starts with key");
+    }
+}
+class ArithmeticOperation {
+
+    int divide(int a, int b) throws ArithmeticException {
+        return a / b;   
+    }
+}
