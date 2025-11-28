@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Grid Layout Demo</title>
+<link rel="stylesheet" href="style5.css">
+
+</head>
+<body>
+
+<div class="grid-container">
+    <div class="grid-item">1</div>
+    <div class="grid-item">2</div>
+    <div class="grid-item">3</div>
+    <div class="grid-item">4</div>
+    <div class="grid-item">5</div>
+    <div class="grid-item">6</div>
+    <div class="grid-item">7</div>
+    <div class="grid-item">8</div>
+    <div class="grid-item span-item">Call to Action</div>
+</div>
+
+</body>
+</html>
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 15px;
+    width: 90%;
+    margin: 50px auto;
+}
+
+.grid-item {
+    background-color: #AEC6CF; /* Soft Blue */
+    color: #333;
+    padding: 20px;
+    border-radius: 5px;
+    min-height: 100px;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.span-item {
+    background-color: #FF6961; /* Salmon Red for emphasis */
+    grid-column: 1 / 4;
+    font-weight: bold;
+    color: white;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML5 Validation Demo</title>
+<link rel="stylesheet" href="style6.css">
+</head>
+
+<body>
+<form action="#" method="POST">
+    <h2>User Login</h2>
+
+    <label for="username">Username (Min 6 chars):</label>
+    <input type="text" id="username" name="username" minlength="6"><br><br>
+
+    <label for="password">Password (*Required):</label>
+    <input type="password" id="password" name="password" required><br><br>
+
+    <button type="submit">Log In</button>
+</form>
+</body>
+</html>
+/* Styling for invalid fields that have been focused/changed */
+input:valid:focus,
+input:valid {
+    border: 1px solid #000; /* Default border color */
+}
+
+input:invalid:touched {
+    border-color: #FF0000;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+/* Basic Input Styling */
+input {
+    padding: 8px;
+    margin-top: 5px;
+    width: 250px;
+    box-sizing: border-box;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navigation Bar Styling</title>
+<link rel="stylesheet" href="style3.css">
+</head>
+
+<body>
+
+<nav>
+    <ul class="nav-menu">
+        <li class="nav-item active"><a href="#">Home</a></li>
+        <li class="nav-item"><a href="#">About</a></li>
+        <li class="nav-item"><a href="#">Services</a></li>
+        <li class="nav-item"><a href="#">Contact</a></li>
+    </ul>
+</nav>
+
+</body>
+</html>
+.nav-menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: #333;
+}
+
+.nav-item {
+    display: inline-block;
+}
+
+.nav-item a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.nav-item.active {
+    background-color: #007BFF;
+    color: white;
+}
+
+
