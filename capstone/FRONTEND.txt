@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Purple Exam Simulator</title>
+<style>
+body{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin:0;
+    padding:40px;
+    min-height:100vh;
+    background: linear-gradient(-45deg,#6a0dad,#9b30ff,#8a2be2,#dda0dd);
+    background-size: 600% 600%;
+    animation: gradientMove 12s ease infinite;
+}
+@keyframes gradientMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.box{
+    max-width:500px;
+    margin:auto;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 25px 40px rgba(0,0,0,0.3);
+    position:relative;
+    overflow:hidden;
+    margin-top:50px;
+}
+
+h2{text-align:center;margin-bottom:10px;color:#4b0082;}
+
+input[type="text"], input[type="password"]{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+
+button{
+    padding:10px 25px;
+    background: #8a2be2;
+    color:white;
+    border:none;
+    border-radius:25px;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:15px;
+}
+button:disabled{
+    background:#dda0dd;
+    cursor:not-allowed;
+}
+
+#errorMsg{
+    color:red;
+    text-align:center;
+    margin-top:10px;
+}
+
+#activeUsers{
+    text-align:center;
+    margin-top:15px;
+    font-weight:bold;
+    color:#4b0082;
+}
+
+/* Quiz styles */
+.quiz-box{
+    display:none;
+    max-width:700px;
+    margin:auto;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(10px);
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 25px 40px rgba(0,0,0,0.3);
+    position:relative;
+    overflow:hidden;
+}
+
+#timer{
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+    padding:10px 25px;
+    margin:15px auto;
+    width:fit-content;
+    color:white;
+    background: linear-gradient(135deg,#8a2be2,#dda0dd);
+    border-radius:30px;
+    box-shadow:0 0 15px #8a2be2,0 0 30px #dda0dd;
+}
+.question-slide{
+    display:none;
+    transition:all 0.5s ease;
+}
+.question-slide.active{
+    display:block;
+}
+.options label{
+    display:block;
+    padding:12px;
+    margin:8px 0;
+    background:#e6e6fa;
+    border-radius:10px;
+    cursor:pointer;
+}
+.correct{background:#d8bfd8!important;}
+.wrong{background:#dda0dd!important;}
+#feedback{
+    text-align:center;
+    font-size:20px;
+    font-weight:bold;
+    margin-top:15px;
+    color:#4b0082;
+}
+#result,#quote{
+    margin-top:20px;
+    padding:15px;
+    border-radius:12px;
+}
+.good{background:#e0b3ff;color:#4b0082;}
+.low{background:#f0e6ff;color:#4b0082;}
+
+/* 🎉 Confetti */
+.confetti{
+    position:fixed;
+    width:10px;
+    height:10px;
+    top:-10px;
+    background-color:#8a2be2;
+    animation: fall 3s linear infinite;
+}
+@keyframes fall{
+    to{transform:translateY(100vh) rotate(360deg);}
+}
+</style>
+</head>
+<body>
+
+<!-- Signup -->
+<div class="box" id="signup-box">
+    <h2>📝 Sign Up</h2>
+    <input type="text" id="signup-username" placeholder="Username">
+    <input type="password" id="signup-password" placeholder="Password">
+    <button onclick="signup()">Sign Up</button>
+    <div id="signupError"></div>
+    <p style="text-align:center;margin-top:10px;">Already have account? <a href="#" onclick="showLogin()">Login</a></p>
+</div>
+
+<!-- Login -->
+<div class="box" id="login-box" style="display:none;">
+    <h2>🔑 Login</h2>
+    <input type="text" id="login-username" placeholder="Username">
+    <input type="password" id="login-password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <div id="loginError"></div>
+    <p style="text-align:center;margin-top:10px;">No account? <a href="#" onclick="showSignup()">Sign Up</a></p>
+</div>
+
+<!-- Active users -->
+<div id="activeUsers">Active Users on Quiz: 0</div>
+
+<!-- Quiz -->
+<div class="quiz-box" id="quiz-box">
+    <button id="logoutBtn" style="float:right;margin-bottom:10px;" onclick="logout()">Logout</button>
+    <h2>📝 Purple Exam Simulator</h2>
+    <div id="timer">Time: 15s</div>
+    <div id="quiz-container"></div>
+    <div id="feedback"></div>
+    <div id="result"></div>
+    <div id="quote"></div>
+</div>
+
+<audio id="tickSound" src="https://www.soundjay.com/clock/sounds/clock-ticking-2.mp3"></audio>
+
+<script>
+// ===== Signup & Login =====
+function getUsers(){return JSON.parse(localStorage.getItem("users")||"[]");}
+function setUsers(users){localStorage.setItem("users", JSON.stringify(users));}
+
+function signup(){
+    const username=document.getElementById("signup-username").value.trim();
+    const password=document.getElementById("signup-password").value.trim();
+    const error=document.getElementById("signupError");
+    if(!username || !password){error.innerText="Please enter username & password!"; return;}
+    let users=getUsers();
+    if(users.find(u=>u.username===username)){error.innerText="Username already exists!"; return;}
+    users.push({username,password});
+    setUsers(users);
+    alert("✅ Signup successful! You can now login.");
+    showLogin();
+}
+
+function login(){
+    const username=document.getElementById("login-username").value.trim();
+    const password=document.getElementById("login-password").value.trim();
+    const error=document.getElementById("loginError");
+    let users=getUsers();
+    const user=users.find(u=>u.username===username && u.password===password);
+    if(user){
+        document.getElementById("login-box").style.display="none";
+        document.getElementById("signup-box").style.display="none";
+        document.getElementById("quiz-box").style.display="block";
+        increaseActiveUsers();
+        resetQuiz();
+        loadQuestion(current);
+    } else{
+        error.innerText="❌ Invalid username or password!";
+    }
+}
+
+function logout(){
+    decreaseActiveUsers();
+    document.getElementById("quiz-box").style.display="none";
+    document.getElementById("login-box").style.display="block";
+    resetQuiz();
+}
+
+function showSignup(){document.getElementById("signup-box").style.display="block"; document.getElementById("login-box").style.display="none";}
+function showLogin(){document.getElementById("signup-box").style.display="none"; document.getElementById("login-box").style.display="block";}
+
+// ===== Active Users Counter =====
+function increaseActiveUsers(){
+    let count = parseInt(localStorage.getItem("activeUsers")||"0");
+    count++;
+    localStorage.setItem("activeUsers", count);
+    updateActiveUsersDisplay();
+}
+function decreaseActiveUsers(){
+    let count = parseInt(localStorage.getItem("activeUsers")||"0");
+    count = Math.max(0,count-1);
+    localStorage.setItem("activeUsers", count);
+    updateActiveUsersDisplay();
+}
+function updateActiveUsersDisplay(){
+    document.getElementById("activeUsers").innerText="Active Users on Quiz: "+(localStorage.getItem("activeUsers")||0);
+}
+window.addEventListener("beforeunload", decreaseActiveUsers);
+updateActiveUsersDisplay();
+
+// ===== Quiz =====
+const questions=[
+ {q:"Java is a ___",o:["OS","Browser","Programming Language","Database"],a:2},
+ {q:"Which is not OOP?",o:["Inheritance","Encapsulation","Compilation","Polymorphism"],a:2},
+ {q:"Keyword to create object?",o:["class","new","void","static"],a:1},
+ {q:"Default int value?",o:["null","1","0","undefined"],a:2},
+ {q:"Which method starts Java?",o:["main()","run()","start()","init()"],a:0},
+ {q:"Which is JVM language?",o:["C","Python","Java","HTML"],a:2},
+ {q:"Which is loop?",o:["if","for","switch","break"],a:1},
+ {q:"Private access?",o:["public","protected","default","private"],a:3},
+ {q:"Which is not primitive?",o:["int","float","String","char"],a:2},
+ {q:"Ends statement?",o:[":",";","?","."],a:1}
+];
+
+let current=0, score=0, timeLeft=15, timer;
+const quizContainer=document.getElementById("quiz-container");
+const timerDisplay=document.getElementById("timer");
+const feedbackDisplay=document.getElementById("feedback");
+const tickSound=document.getElementById("tickSound");
+
+function resetQuiz(){current=0; score=0; timeLeft=15; clearInterval(timer);}
+
+// ===== Quiz Functions =====
+function loadQuestion(index){
+    const q=questions[index];
+    quizContainer.innerHTML=`<div class="question-slide active">
+    <div class="question">${index+1}. ${q.q}</div>
+    ${q.o.map((opt,i)=>`<label><input type="radio" name="option" value="${i}"> ${opt}</label>`).join('')}
+    <button onclick="submitAnswer()">Submit Answer</button>
+    </div>`;
+    timeLeft=15;
+    timerDisplay.innerText="Time: "+timeLeft+"s";
+    timerDisplay.style.background="linear-gradient(135deg,#8a2be2,#dda0dd)";
+    startTimer();
+}
+
+function startTimer(){
+    clearInterval(timer);
+    timer=setInterval(()=>{
+        timeLeft--;
+        timerDisplay.innerText="Time: "+timeLeft+"s";
+        if(timeLeft<=5 && timeLeft>0){
+            tickSound.currentTime=0; tickSound.play();
+            timerDisplay.style.background="linear-gradient(135deg,#dda0dd,#8a2be2)";
+        }
+        if(timeLeft<=0){ clearInterval(timer); submitAnswer(true);}
+    },1000);
+}
+
+function submitAnswer(auto=false){
+    clearInterval(timer);
+    const selected=document.querySelector('input[name="option"]:checked');
+    const q=questions[current];
+    let correct=false;
+    if(selected && +selected.value===q.a) {score++; correct=true;}
+    if(auto && !selected) {feedbackDisplay.innerHTML=`⏰ Time's up! Correct: ${q.o[q.a]}`;}
+    else if(correct){feedbackDisplay.innerHTML=`✅ Excellent!`;}
+    else{feedbackDisplay.innerHTML=`❌ Better luck next time! Correct: ${q.o[q.a]}`;}
+    document.querySelectorAll('input[name="option"]').forEach(inp=>inp.disabled=true);
+    setTimeout(()=>{
+        feedbackDisplay.innerHTML="";
+        current++;
+        if(current<questions.length){loadQuestion(current);}
+        else{showResult(); decreaseActiveUsers();}
+    },2000);
+}
+
+function showResult(){
+    quizContainer.innerHTML="";
+    timerDisplay.innerText="";
+    const resultDisplay=document.getElementById("result");
+    const quoteDisplay=document.getElementById("quote");
+    resultDisplay.innerText=`Your Score: ${score}/${questions.length}`;
+    if(score===questions.length){resultDisplay.className="good"; quoteDisplay.innerText="🎉 Perfect Score! Congratulations! 🌟"; launchConfetti();}
+    else if(score>=5){resultDisplay.className="good"; quoteDisplay.innerText="👍 Good job! Keep practicing 💜";}
+    else{resultDisplay.className="low"; quoteDisplay.innerText="😊 Better luck next time! Keep trying 💜";}
+}
+
+// 🎉 Confetti
+function launchConfetti(){
+    for(let i=0;i<80;i++){
+        const confetti=document.createElement("div");
+        confetti.className="confetti";
+        confetti.style.left=Math.random()*100+"vw";
+        confetti.style.backgroundColor="#8a2be2";
+        confetti.style.animationDuration=Math.random()*3+2+"s";
+        document.body.appendChild(confetti);
+        setTimeout(()=>confetti.remove(),5000);
+    }
+}
+</script>
+
+</body>
+</html>
